@@ -3,11 +3,11 @@
         "1": {
             "Name": "Symfony_db",
             "Group": "Servers",
-            "Host": "172.23.0.3",
+            "Host": "db",
             "Port": 5432,
             "MaintenanceDB": "symfony",
             "Username": "postgres",
-            "PassFile": "172.23.0.3:5432:symfony:postgres:postgres",
+            "PassFile": "db:5432:symfony:postgres:postgres",
             "SSLMode": "prefer"
         }
     }
