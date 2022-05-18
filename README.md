@@ -14,3 +14,7 @@ docker compose build
 ```console
 docker compose up -d
 ```
+* Remove container
+```console
+docker compose down -v
+```
