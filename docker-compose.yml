@@ -1,0 +1,63 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:13-alpine # The image from Docker Hub
+    container_name: myapp_db
+    environment:
+      # This is my settings, change them as you prefer
+      POSTGRES_DB: symfony
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      # Allows to communicate with other services with the same network
+      - myapp
+  phpmyadmin:
+    image: dpage/pgadmin4:latest
+    container_name: myapp_pgadmin
+    ports:
+      - 8080:80
+    environment:
+      PGADMIN_DEFAULT_EMAIL: root@root.com # Same name that the database service, here db
+      PGADMIN_DEFAULT_PASSWORD: root # Same password as MYSQL_ROOT_PASSWORD
+    volumes:
+      - ./pgadmin/servers.json:/pgadmin4/servers.json
+    networks:
+      - myapp # You see here the same network as the service db
+  php:
+    container_name: myapp_php
+    depends_on:
+      - db
+    build:
+      context: ./php/
+      dockerfile: Dockerfile
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: 1
+    volumes:
+      - ./app/:/var/www/symfony
+    networks:
+      - myapp
+  nginx:
+    container_name: myapp_nginx
+    depends_on:
+      - php # We need to load PHP for the Nginx configuration file
+    build:
+      context: ./nginx/
+      dockerfile: Dockerfile
+    ports:
+      - 8000:80 # Redirect Docker port 80 to localhost port 8000. So you'll access to Nginx with localhost:8000
+      - 8443:443 # Same for HTTPS
+    networks:
+      - myapp
+
+networks:
+  myapp:
+
+
+volumes:
+  db-data:
