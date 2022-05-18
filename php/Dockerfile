@@ -24,4 +24,4 @@ RUN curl -sS https://get.symfony.com/cli/installer | bash
 RUN mv /root/.symfony/bin/symfony /usr/local/bin/symfony
 
 # Set the default directory inside the container
-WORKDIR /var/www/symfony
+WORKDIR ${APP_PATH}
