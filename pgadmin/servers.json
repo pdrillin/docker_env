@@ -5,9 +5,9 @@
             "Group": "Servers",
             "Host": "db",
             "Port": 5432,
-            "MaintenanceDB": "symfony",
-            "Username": "postgres",
-            "PassFile": "db:5432:symfony:postgres:postgres",
+            "MaintenanceDB": "app",
+            "Username": "symfony",
+            "PassFile": "db:5432:app:symfony:symfony",
             "SSLMode": "prefer"
         }
     }
