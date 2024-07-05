@@ -6,9 +6,9 @@ endif
 COMMAND_DC =docker compose
 
 use-mysql:
-	./script/mysql.sh mysql
+	./script/db_manager.sh mysql
 use-pgsql:
-	./script/mysql.sh pgsql
+	./script/db_manager.sh pgsql
 
 docker-build:
 			$(COMMAND_DC) build
