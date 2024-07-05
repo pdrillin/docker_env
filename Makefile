@@ -3,7 +3,7 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
-COMMAND_DC = ${DC_COMMAND}
+COMMAND_DC =docker compose
 
 use-mysql:
 	./script/mysql.sh mysql
