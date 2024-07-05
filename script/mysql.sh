@@ -40,29 +40,38 @@ else
   echo -e "${YELLOW}PostgreSQL is already use as the db for the docker env"
   echo -e "MySQL configuration...${NOCOLOR}"
 
-  echo -e "${GREEN}Docker image set"
-  sed "s/image: postgres:13-alpine/image: mysql:8.0" $File
+  echo -e "${GREEN}Docker image set${NOCOLOR}	"
+  
+  sed -i -e 's/image: postgres:13-alpine/image: mysql:8.0/g' $File
 
-  echo -e "${GREEN}User vat set"
-  sed "s/POSTGRES_USER/MYSQL_USER" $File
+  echo -e "${GREEN}User var set"
+  sed -i -e 's/POSTGRES_USER/MYSQL_USER/g' $File
 
   echo -e "${GREEN}User password var set" 
-  sed "s/POSTGRES_USER/MYSQL_USER" $File
+  sed -i -e 's/POSTGRES_PASSWORD/MYSQL_PASSWORD/g' $File
 
   echo -e "${GREEN}Database name var set"
-  sed "s/POSTGRES_DB/MYSQL_DATABASE" $File
+  sed -i -e 's/POSTGRES_DB/MYSQL_DATABASE/g' $File
 
   echo -e "${GREEN}Database ports set"
-  sed 's/- ${DB_PGSQL_PORT}:5432/- ${DB_MYSQL_PORT}:3306' $File
+  sed -i -e 's/- ${DB_PGSQL_PORT}:5432/- ${DB_MYSQL_PORT}:3306/g' $File
 
   echo -e "${GREEN}Volumes set"
-  sed "s+- db-data:/var/lib/postgresql/data+- db-data:/var/lib/mysql" $File
+  sed -i -e 's/- db-data:\/var\/lib\/postgresql\/data/- db-data:\/var\/lib\/mysql/g' $File
   
-  echo -e '${GREEN}Root password set'
-  sed '7 a \ \ \ \ \ \ MYSQL_ROOT_PASSWORD:${MYSQL_ROOT_PASSWORD}' $File
+  echo -e "${GREEN}Root password set"
+  sed -i -e '7 a \ \ \ \ \ \ MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}' $File
 
   echo -e "${YELLOW}MySQL is ready${NOCOLOR}"
   echo -e "${YELLOW}PhpMyAdmin configuration..${NOCOLOR}"
   
-  exit 0
+  echo -e "${GREEN}Docker image set"
+  sed -i -e 's/image: dpage\/pgadmin4:latest/image: phpmyadmin\/phpmyadmin/g' $File
+  
+  echo -e "${GREEN}Add PMA_HOST"
+  sed -i -e 's/PGADMIN_DEFAULT_EMAIL: ${DB_ADMIN_USER}/PMA_HOST: myapp_db/g' $File
+  
+  echo -e "${GREEN}remove unused env var"
+  sed -i -e '/PGADMIN_DEFAULT_PASSWORD/d' $File
+  
 fi
